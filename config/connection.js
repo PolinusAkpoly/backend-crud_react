@@ -6,7 +6,8 @@ let DBURL = process.env.DATABASE
 
 mongoose.connect(DBURL, {
 	useNewUrlParser: true,
-	useUnifiedTopology: true
+	useUnifiedTopology: true,
+	connectTimeoutMS: 3000 
 })
 .then(() => {
 	console.log("Connection reussi à mongoDB")

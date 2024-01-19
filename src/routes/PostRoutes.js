@@ -5,7 +5,7 @@
 const express = require('express');
 const router = express.Router();
 const PostController = require('../controllers/PostController');
-// const uploadFileConfig = require('../../config/upload.file.config.js');
+const uploadFileConfig = require('../../config/upload.file.config.js');
 
 /*
  * GET 
@@ -30,7 +30,7 @@ router.get('/:id', /*auth.admin,*/ PostController.showPostById);
 /*
  * POST
  */
-router.post('/', /*uploadFileConfig,*/ /*auth.admin,*/ PostController.createPost);
+router.post('/', uploadFileConfig, /*auth.admin,*/ PostController.createPost);
 /*
  * POST
  */

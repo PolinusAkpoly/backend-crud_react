@@ -188,44 +188,44 @@ module.exports = {
 
         }
     },
-        /**
-         * Generate By Mudey Formation (https://mudey.fr)
-         * PostController.showPostById()
-         */
-        showPostById: async (req, res) => {
-            try {
-                const id = req.params.id;
-                const Post = await PostModel.findOne({ _id: id })
+    /**
+     * Generate By Mudey Formation (https://mudey.fr)
+     * PostController.showPostById()
+     */
+    showPostById: async (req, res) => {
+        try {
+            const id = req.params.id;
+            const Post = await PostModel.findOne({ _id: id })
 
-                if (!Post) {
-                    return res.status(404).json({
-                        isSuccess: false,
-                        status: 404,
-                        message: 'No such Post',
-                        request_time: moment(new Date()).format("DD/MM/YY HH:mm:ss")
-                    });
-                }
-
-                return res.status(200).json({
-                    isSuccess: true,
-                    status: 200,
-                    result: Post,
-                    request_time: moment(new Date()).format("DD/MM/YY HH:mm:ss")
-                });
-
-            } catch (error) {
-
-                console.log(error);
-
-                return res.status(500).json({
+            if (!Post) {
+                return res.status(404).json({
                     isSuccess: false,
-                    status: 500,
-                    message: 'Error when getting Post.',
-                    error: error,
+                    status: 404,
+                    message: 'No such Post',
                     request_time: moment(new Date()).format("DD/MM/YY HH:mm:ss")
                 });
-
             }
+
+            return res.status(200).json({
+                isSuccess: true,
+                status: 200,
+                result: Post,
+                request_time: moment(new Date()).format("DD/MM/YY HH:mm:ss")
+            });
+
+        } catch (error) {
+
+            console.log(error);
+
+            return res.status(500).json({
+                isSuccess: false,
+                status: 500,
+                message: 'Error when getting Post.',
+                error: error,
+                request_time: moment(new Date()).format("DD/MM/YY HH:mm:ss")
+            });
+
+        }
         /**
          * Generate By Mudey Formation (https://mudey.fr)
          * PostController.showPostById()
@@ -265,84 +265,87 @@ module.exports = {
 
             }
         }
-        },
+    },
 
-            /**
-             * Generate By Mudey Formation (https://mudey.fr)
-             * PostController.createPost()
-             */
-            createPost: async (req, res) => {
-                try {
+    /**
+     * Generate By Mudey Formation (https://mudey.fr)
+     * PostController.createPost()
+     */
+    createPost: async (req, res) => {
+        console.log({body: req?.body});
+        try {
+
+           
 
 
-                    if (req?.files?.lenth) {
-                        var Post = JSON.parse(req.body.Post)
-                    } else {
-                        var { Post
-                    } = req.body
-                }
+            if (req?.files?.lenth) {
+                var Post = JSON.parse(req.body.Post)
+            } else {
+                var { Post
+                } = req.body
+            }
 
-        Post = typeof (Post) === "string" ? JSON.parse(Post) : Post
-                console.log(req.body)
+            Post = typeof (Post) === "string" ? JSON.parse(Post) : Post
+            console.log(req.body)
 
-                if (!Post) {
-                    return res.status(422).json({
-                        isSuccess: false,
-                        status: 422,
-                        message: 'Missing params of Post.',
-                        request_time: moment(new Date()).format("DD/MM/YY HH:mm:ss")
-                    });
-                }
-
-                if (!Object.keys(Post).length) {
-                    return res.status(422).json({
-                        isSuccess: false,
-                        status: 422,
-                        message: 'Empty Post !',
-                        request_time: moment(new Date()).format("DD/MM/YY HH:mm:ss")
-                    });
-                }
-
-                if (req?.files?.length) {
-                    const file = req?.files[0]
-                    fs.mkdir(process.cwd() + "/public/assets/files/Post", (err) => {
-                        if (err) console.log(err)
-                    })
-                    fs.rename(process.cwd() + `/public/assets/files/${file.filename}`, process.cwd() + `/public/assets/files/Post/${file.filename}`, function (err) {
-                        if (err) throw err
-                        console.log('Successfully renamed - moved!')
-                    })
-
-                    Post.imageUrl = `${req.protocol}://${req.get('host')}/assets/files/Post/${file.filename}`
-                   
-                }
-
-                Post = new PostModel({ ...Post })
-
-                Post.created_at = Post?.created_at ? Post.created_at : new Date()
-
-                await Post.save()
-
-                return res.status(201).json({
-                    isSuccess: true,
-                    status: 201,
-                    message: "Post is saved !",
-                Post,
+            if (!Post) {
+                return res.status(422).json({
+                    isSuccess: false,
+                    status: 422,
+                    message: 'Missing params of Post.',
                     request_time: moment(new Date()).format("DD/MM/YY HH:mm:ss")
+                });
+            }
+
+            if (!Object.keys(Post).length) {
+                return res.status(422).json({
+                    isSuccess: false,
+                    status: 422,
+                    message: 'Empty Post !',
+                    request_time: moment(new Date()).format("DD/MM/YY HH:mm:ss")
+                });
+            }
+
+            if (req?.files?.length) {
+                const file = req?.files[0]
+                fs.mkdir(process.cwd() + "/public/assets/files/Post", (err) => {
+                    if (err) console.log(err)
+                })
+                fs.rename(process.cwd() + `/public/assets/files/${file.filename}`, process.cwd() + `/public/assets/files/Post/${file.filename}`, function (err) {
+                    if (err) throw err
+                    console.log('Successfully renamed - moved!')
+                })
+
+                Post.imageUrl = `${req.protocol}://${req.get('host')}/assets/files/Post/${file.filename}`
+
+            }
+
+            Post = new PostModel({ ...Post })
+
+            Post.created_at = Post?.created_at ? Post.created_at : new Date()
+
+            await Post.save()
+
+            return res.status(201).json({
+                isSuccess: true,
+                status: 201,
+                message: "Post is saved !",
+                Post,
+                request_time: moment(new Date()).format("DD/MM/YY HH:mm:ss")
             });
 
         } catch (error) {
 
-    console.log(error);
+            console.log(error);
 
-    return res.status(500).json({
-        isSuccess: false,
-        status: 500,
-        message: 'Error when creating Post.',
-        error: error,
-        request_time: moment(new Date()).format("DD/MM/YY HH:mm:ss")
-    });
-}
+            return res.status(500).json({
+                isSuccess: false,
+                status: 500,
+                message: 'Error when creating Post.',
+                error: error,
+                request_time: moment(new Date()).format("DD/MM/YY HH:mm:ss")
+            });
+        }
     },
 
     /**
@@ -350,128 +353,128 @@ module.exports = {
      * PostController. updatePostById()
      */
     updatePostById: async (req, res) => {
-    try {
-        const id = req.params.id;
-        if (req?.files?.length) {
-            var Post = JSON.parse(req.body.Post)
-        } else {
-            var { Post
-        } = req.body
-    }
         try {
-        var deleteFiles = JSON.parse(req.body?.deleteFiles)
+            const id = req.params.id;
+            if (req?.files?.length) {
+                var Post = JSON.parse(req.body.Post)
+            } else {
+                var { Post
+                } = req.body
+            }
+            try {
+                var deleteFiles = JSON.parse(req.body?.deleteFiles)
 
-    } catch (error) {
-        var deleteFiles = []
+            } catch (error) {
+                var deleteFiles = []
 
-    }
-    Post = typeof (Post) == "string" ? JSON.parse(Post) : Post
+            }
+            Post = typeof (Post) == "string" ? JSON.parse(Post) : Post
 
-    if (!Post) {
-        return res.status(422).json({
-            isSuccess: false,
-            status: 422,
-            message: 'Missing params of Post.',
-            request_time: moment(new Date()).format("DD/MM/YY HH:mm:ss")
-        });
-    }
-    if (!Object.keys(Post).length) {
-        return res.status(500).json({
-            isSuccess: false,
-            status: 422,
-            message: 'Empty Post !',
-            request_time: moment(new Date()).format("DD/MM/YY HH:mm:ss")
-        });
-    }
+            if (!Post) {
+                return res.status(422).json({
+                    isSuccess: false,
+                    status: 422,
+                    message: 'Missing params of Post.',
+                    request_time: moment(new Date()).format("DD/MM/YY HH:mm:ss")
+                });
+            }
+            if (!Object.keys(Post).length) {
+                return res.status(500).json({
+                    isSuccess: false,
+                    status: 422,
+                    message: 'Empty Post !',
+                    request_time: moment(new Date()).format("DD/MM/YY HH:mm:ss")
+                });
+            }
 
-    if (req?.files?.length) {
-        const file = req?.files[0]
-        fs.mkdir(process.cwd() + "/public/assets/files/Post", (err) => {
-            if (err) console.log(err)
-        })
-        fs.rename(process.cwd() + `/public/assets/files/${file.filename}`, process.cwd() + `/public/assets/files/Post/${file.filename}`, function (err) {
-            if (err) throw err
-            console.log('Successfully renamed - moved!')
-        })
+            if (req?.files?.length) {
+                const file = req?.files[0]
+                fs.mkdir(process.cwd() + "/public/assets/files/Post", (err) => {
+                    if (err) console.log(err)
+                })
+                fs.rename(process.cwd() + `/public/assets/files/${file.filename}`, process.cwd() + `/public/assets/files/Post/${file.filename}`, function (err) {
+                    if (err) throw err
+                    console.log('Successfully renamed - moved!')
+                })
 
-        Post.imageUrl = `${req.protocol}://${req.get('host')}/assets/files/Post/${file.filename}`
-      
-    }
+                Post.imageUrl = `${req.protocol}://${req.get('host')}/assets/files/Post/${file.filename}`
 
-    if (deleteFiles?.length) {
-        deleteFiles.forEach(currentFileUrl =>{
-            const filename = "public/assets/" + currentFileUrl.split('/assets/')[1];
-            console.log({ filename });
-            fs.unlink(filename, (err) => {
-                if (err) {
-                    console.log(err.message);
-                }
-            });
+            }
 
-        })
-    }
+            if (deleteFiles?.length) {
+                deleteFiles.forEach(currentFileUrl => {
+                    const filename = "public/assets/" + currentFileUrl.split('/assets/')[1];
+                    console.log({ filename });
+                    fs.unlink(filename, (err) => {
+                        if (err) {
+                            console.log(err.message);
+                        }
+                    });
 
-    Post.updated_at = Post?.updated_at ? Post.updated_at : new Date()
+                })
+            }
 
-    delete Post?._id
-    await PostModel.updateOne({ _id: id }, { ...Post })
+            Post.updated_at = Post?.updated_at ? Post.updated_at : new Date()
 
-    return res.status(200).json({
-        isSuccess: true,
-        status: 200,
-        message: "Post is updated !",
+            delete Post?._id
+            await PostModel.updateOne({ _id: id }, { ...Post })
+
+            return res.status(200).json({
+                isSuccess: true,
+                status: 200,
+                message: "Post is updated !",
                 Post,
-        request_time: moment(new Date()).format("DD/MM/YY HH:mm:ss")
+                request_time: moment(new Date()).format("DD/MM/YY HH:mm:ss")
             });
 
-    } catch (error) {
-    console.log(error);
+        } catch (error) {
+            console.log(error);
 
-    return res.status(500).json({
-        isSuccess: false,
-        status: 500,
-        message: 'Error when updating Post.',
-        error: error,
-        request_time: moment(new Date()).format("DD/MM/YY HH:mm:ss")
-    });
-}
+            return res.status(500).json({
+                isSuccess: false,
+                status: 500,
+                message: 'Error when updating Post.',
+                error: error,
+                request_time: moment(new Date()).format("DD/MM/YY HH:mm:ss")
+            });
+        }
     },
     /**
      * Generate By Mudey Formation (https://mudey.fr)
      * PostController.sortPostByPosition
      */
     sortPostByPosition: (req, res) => {
-    try {
+        try {
 
-        const { datas } = req.body
+            const { datas } = req.body
 
-        datas.forEach(async (elt) => {
-            await PostModel.updateOne({ _id: elt._id }, {
-                $set: { position: elt.position }
+            datas.forEach(async (elt) => {
+                await PostModel.updateOne({ _id: elt._id }, {
+                    $set: { position: elt.position }
+                })
+            });
+
+
+            return res.status(200).json({
+                status: 200,
+                isSuccess: true,
+                message: "Post sorted !",
+                request_time: moment(new Date()).format("DD/MM/YY HH:mm:ss")
+            });
+
+        } catch (error) {
+
+            console.log(error);
+
+            return res.status(500).json({
+                status: 500,
+                isSuccess: false,
+                error: error,
+                request_time: moment(new Date()).format("DD/MM/YY HH:mm:ss")
             })
-        });
 
-
-        return res.status(200).json({
-            status: 200,
-            isSuccess: true,
-            message: "Post sorted !",
-            request_time: moment(new Date()).format("DD/MM/YY HH:mm:ss")
-        });
-
-    } catch (error) {
-
-        console.log(error);
-
-        return res.status(500).json({
-            status: 500,
-            isSuccess: false,
-            error: error,
-            request_time: moment(new Date()).format("DD/MM/YY HH:mm:ss")
-        })
-
-    }
-},
+        }
+    },
 
     /**
      * Generate By Mudey Formation (https://mudey.fr)

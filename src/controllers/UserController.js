@@ -204,7 +204,7 @@ const UserModel = require('../models/UserModel');
                 pageNumber = value > 0 ? value : 1
             }
 
-            let Users = await UserModel.find({})
+            let Users = await UserModel.find({},{password: false})
                 // .populate("name")
                 .skip((pageNumber - 1) * pageLimit).limit(pageLimit)
 

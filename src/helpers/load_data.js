@@ -21,7 +21,7 @@ module.exports = {
 
                 console.log(user);
 
-                // await user.save(); // Ajouter cette ligne pour sauvegarder l'utilisateur dans la base de données
+                await user.save(); // Ajouter cette ligne pour sauvegarder l'utilisateur dans la base de données
             }
         }
 
